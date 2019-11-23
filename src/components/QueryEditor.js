@@ -3,30 +3,17 @@ import PropTypes from "prop-types";
 
 import Storage from "../Storage";
 
-const COMMAND = 91; // command key on mbp
-
 function QueryEditor({ runQuery, connection }) {
   const store = new Storage(connection);
   const [query, setQuery] = useState(store.get("query") || "");
-  const [commandMode, setCommandMode] = useState(false);
 
   const COMMANDS = {
     ["T".charCodeAt(0)]: () => runQuery(query)
   };
 
-  const keyup = e => {
-    if (e.keyCode === COMMAND) {
-      setCommandMode(false);
-    }
-  };
-
   const keydown = e => {
-    if (e.keyCode === COMMAND) {
-      setCommandMode(true);
-    } else if (commandMode) {
-      if (COMMANDS[e.keyCode]) {
-        COMMANDS[e.keyCode]();
-      }
+    if (e.metaKey && COMMANDS[e.keyCode]) {
+      COMMANDS[e.keyCode]();
     }
   };
 
@@ -35,7 +22,6 @@ function QueryEditor({ runQuery, connection }) {
       className="form-control"
       rows="10"
       onKeyDown={keydown}
-      onKeyUp={keyup}
       onChange={e => setQuery(store.set("query", e.target.value))}
       value={query}
       placeholder="select * from table"

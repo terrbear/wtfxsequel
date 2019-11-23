@@ -35,6 +35,23 @@ function createWindow() {
     }
   });
 
+  mainWindow.webContents.on(
+    "new-window",
+    (event, url, frameName, disposition, options) => {
+      event.preventDefault();
+      Object.assign(options, {
+        width: 1200,
+        height: 1000,
+        webPreferences: {
+          preload: path.join(__dirname, "preload.js"),
+          nodeIntegrationInSubFrames: true,
+        }
+      });
+      event.newGuest = new BrowserWindow(options);
+      event.newGuest.loadURL(url);
+    }
+  );
+
   // and load the index.html of the app.
   //mainWindow.loadFile('index.html')
   mainWindow.loadURL("http://localhost:3000");
