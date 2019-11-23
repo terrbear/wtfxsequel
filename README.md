@@ -19,4 +19,3 @@ TODO
 * support multiple windows
 * status bar for queries
 * auto-format numbers to be right-aligned
-* save queries per connection

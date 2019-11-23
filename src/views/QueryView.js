@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 
-const COMMAND = 91; // command key on mbp
+import QueryEditor from "../components/QueryEditor";
 
-function QueryView() {
-  const [query, setQuery] = useState("");
+function QueryView({ connection }) {
   const [cols, setCols] = useState([]);
   const [rows, setRows] = useState([]);
-  const [commandMode, setCommandMode] = useState(false);
 
-  const runQuery = () => {
+  const runQuery = (query) => {
     window.ipc.invoke("query", query).then(res => {
       if (res.length > 0) {
         setCols(Object.keys(res[0]));
@@ -17,38 +15,10 @@ function QueryView() {
     });
   };
 
-  const COMMANDS = {
-    ["T".charCodeAt(0)]: runQuery
-  };
-
-  const keyup = e => {
-    if (e.keyCode === COMMAND) {
-      setCommandMode(false);
-    } else {
-      setQuery(e.target.value);
-    }
-  };
-
-  const keydown = e => {
-    if (e.keyCode === COMMAND) {
-      setCommandMode(true);
-    } else if (commandMode) {
-      if (COMMANDS[e.keyCode]) {
-        COMMANDS[e.keyCode]();
-      }
-    }
-  };
-
   return (
     <div id="query-view">
       <div id="query-pane">
-        <textarea
-          className="form-control"
-          rows="10"
-          onKeyDown={keydown}
-          onKeyUp={keyup}
-          placeholder="select * from table"
-        />
+        <QueryEditor connection={connection} runQuery={runQuery} />
       </div>
       <div id="results-pane">
         {rows.length > 0 && (
