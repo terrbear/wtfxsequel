@@ -27,7 +27,7 @@ body {
 #results-pane {
   background-color: white;
   overflow: scroll;
-  height: 800px;
+  height: 700px;
 }
 
 #results-pane table {

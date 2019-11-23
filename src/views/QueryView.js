@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 
 import QueryEditor from "../components/QueryEditor";
 
@@ -7,17 +7,23 @@ import StatusContext from "../StatusContext";
 function QueryView({ connection }) {
   const [cols, setCols] = useState([]);
   const [rows, setRows] = useState([]);
-  const statusContext = useContext(StatusContext);
+  const status = useContext(StatusContext);
 
-  const runQuery = (query) => {
-    statusContext.setStatus("Running query...");
-    window.ipc.invoke("query", query).then(res => {
-      if (res.length > 0) {
-        statusContext.setStatus(`${res.length} rows returned`);
-        setCols(Object.keys(res[0]));
-        setRows(res);
-      }
-    });
+  const runQuery = query => {
+    status.setStatus("Running query...");
+    window.ipc
+      .invoke("query", query)
+      .then(res => {
+        if (res.length > 0) {
+          status.setStatus(`${res.length} rows returned`);
+          setCols(Object.keys(res[0]));
+          setRows(res);
+        }
+      })
+      .catch(err => {
+        console.log('err: ', err);
+        status.setStatus(("" + err).replace("Error invoking remote method 'query': error ", ''));
+      });
   };
 
   return (
