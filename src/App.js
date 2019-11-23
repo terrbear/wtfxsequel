@@ -1,44 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import pgp from 'pg-promise';
+import React, { useState } from "react";
 
-const config = {
-  host: 'localhost',
-  port: 5432,
-  database: 'finance_funday',
-  user: 'tinle',
-  password: '',
-  max: 5, // max number of clients in the pool
-  idleTimeoutMillis: 1000, // how long a client is allowed to remain idle before being closed
-};
+import QueryView from "./views/QueryView";
+import ConnectionSelectView from "./views/ConnectionSelectView";
 
+import "./App.css";
 
-const db = pgp(config);
+function ConnectionSelector({ setConnection }) {
+  const connections = [
+    {
+      id: "1",
+      name: "localhost"
+    }
+  ];
 
-
-//const { db } = require('../connections/redshift');
-
-db.any('SELECT * FROM product WHERE price BETWEEN $1 AND $2', [1, 10])
-
+  return (
+    <React.Fragment>
+      <h2>Choose a connection</h2>
+      <ul>
+        {connections.map(c => (
+          <li onClick={() => setConnection(c.id)} key={c.id}>
+            {c.name}
+          </li>
+        ))}
+      </ul>
+    </React.Fragment>
+  );
+}
 
 function App() {
+  const [connection, setConnection] = useState("1");
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          xEdit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {connection && <QueryView connection={connection} />}
+      {!connection && <ConnectionSelectView setConnection={setConnection} />}
     </div>
   );
 }
