@@ -90,3 +90,7 @@ body {
   font-size: small;
   background-color: rgb(200, 200, 200);
 }
+
+.null {
+  color: #bec2c6;
+}

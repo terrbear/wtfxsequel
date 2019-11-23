@@ -16,7 +16,6 @@ features / todo:
 * support connections through ssh
 * resize automagically and line up with pixel heights/widths
 * menu options for new window / run query
-* format nulls as greyed out / null word
 * support deleting connections
 * validate connections on backend
 * test connectivity
@@ -28,6 +27,8 @@ features / todo:
 * show which db is selected on lefthand side
 * split out db connection to its own module
 * husky
+* support running highlighted query
+* proper logger
 
 before sharing:
 * host bootstrap internally

@@ -11,7 +11,7 @@ function QueryView({ connection }) {
   const status = useContext(StatusContext);
 
   const runQuery = query => {
-    const lastQuery = query.split(';').filter(q => !!q).pop().trim();
+    const lastQuery = query.split(';').map(q => q.trim()).filter(q => !!q).pop();
 
     status.setStatus("Running query...");
     window.ipc

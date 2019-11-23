@@ -8,7 +8,7 @@ function ResultsTable({ cols, rows }) {
     if (rows && rows[0]) {
       const fieldStyles = {};
 
-      console.log('row0: ', rows[0]);
+      console.log("row0: ", rows[0]);
 
       Object.keys(rows[0]).forEach(field => {
         if (typeof rows[0][field] === "number") {
@@ -33,7 +33,9 @@ function ResultsTable({ cols, rows }) {
       <thead>
         <tr>
           {cols.map((col, idx) => (
-            <th key={idx}><div className="table-header">{col}</div></th>
+            <th key={idx}>
+              <div className="table-header">{col}</div>
+            </th>
           ))}
         </tr>
       </thead>
@@ -42,7 +44,11 @@ function ResultsTable({ cols, rows }) {
           <tr key={idx}>
             {cols.map((col, cIdx) => (
               <td style={styles[col]} key={cIdx}>
-                {row[col]}
+                {row[col] === null ? (
+                  <span className="null">NULL</span>
+                ) : (
+                  row[col]
+                )}
               </td>
             ))}
           </tr>

@@ -58,6 +58,10 @@ ipcMain.handle("connections/save", async (event, payload) => {
 });
 
 ipcMain.handle("query", async (event, { connectionId, query }) => {
+  if (process.env.DEBUG_QUERY) {
+    console.log("query: ", query);
+  }
+
   if (dbHandles[connectionId]) {
     return dbHandles[connectionId].any(query);
   }
