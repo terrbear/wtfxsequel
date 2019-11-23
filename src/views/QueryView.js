@@ -11,9 +11,11 @@ function QueryView({ connection }) {
   const status = useContext(StatusContext);
 
   const runQuery = query => {
+    const lastQuery = query.split(';').filter(q => !!q).pop().trim();
+
     status.setStatus("Running query...");
     window.ipc
-      .invoke("query", { connectionId: connection, query })
+      .invoke("query", { connectionId: connection, query: lastQuery })
       .then(res => {
         if (res.length > 0) {
           status.setStatus(`${res.length} rows returned`);

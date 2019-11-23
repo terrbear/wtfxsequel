@@ -8,6 +8,14 @@ const keytar = require("keytar");
 
 const store = new Store();
 
+pgp.pg.types.setTypeParser(1700, function(val) {
+  return parseFloat(val);
+});
+
+pgp.pg.types.setTypeParser(1114, stringValue => {
+  return new Date(Date.parse(stringValue + "+0000"));
+});
+
 if (process.env.CLEAR_STORAGE) {
   store.clear();
 }
@@ -57,7 +65,11 @@ ipcMain.handle("query", async (event, { connectionId, query }) => {
   const connection = store.get("connections").find(c => c.id === connectionId);
 
   return keytar.getPassword("wtfx sequel", connectionId).then(password => {
-    dbHandles[connectionId] = pgp({ ...DEFAULT_CONNECTION_OPTIONS, ...connection, password });
+    dbHandles[connectionId] = pgp({
+      ...DEFAULT_CONNECTION_OPTIONS,
+      ...connection,
+      password
+    });
 
     return dbHandles[connectionId].any(query);
   });

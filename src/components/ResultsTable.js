@@ -8,6 +8,8 @@ function ResultsTable({ cols, rows }) {
     if (rows && rows[0]) {
       const fieldStyles = {};
 
+      console.log('row0: ', rows[0]);
+
       Object.keys(rows[0]).forEach(field => {
         if (typeof rows[0][field] === "number") {
           fieldStyles[field] = { textAlign: "right" };
@@ -18,38 +20,41 @@ function ResultsTable({ cols, rows }) {
     }
   }, [rows]);
 
+  if (rows.length === 0) {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <h3>Run a query to get results</h3>
+      </div>
+    );
+  }
+
   return (
-    <div className="table-responsive">
-      {rows.length > 0 && (
-        <table className="table table-bordered table-hover table-sm">
-          <thead>
-            <tr>
-              {cols.map((col, idx) => (
-                <th key={idx}>{col}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, idx) => (
-              <tr key={idx}>
-                {cols.map((col, cIdx) => (
-                  <td style={styles[col]} key={cIdx}>
-                    {row[col]}
-                  </td>
-                ))}
-              </tr>
+    <table className="table table-bordered table-hover table-sm">
+      <thead>
+        <tr>
+          {cols.map((col, idx) => (
+            <th key={idx}><div className="table-header">{col}</div></th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, idx) => (
+          <tr key={idx}>
+            {cols.map((col, cIdx) => (
+              <td style={styles[col]} key={cIdx}>
+                {row[col]}
+              </td>
             ))}
-          </tbody>
-        </table>
-      )}
-      {rows.length === 0 && <h3>Run a query to get results</h3>}
-    </div>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
 ResultsTable.propTypes = {
   rows: PropTypes.array.isRequired,
-  cols: PropTypes.array.isRequired,
-}
+  cols: PropTypes.array.isRequired
+};
 
 export default ResultsTable;

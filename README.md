@@ -17,17 +17,17 @@ features / todo:
 * resize automagically and line up with pixel heights/widths
 * menu options for new window / run query
 * format nulls as greyed out / null word
-* prettier borders / shadows or something
 * support deleting connections
-* support adding connections
 * validate connections on backend
 * test connectivity
-* test with no connections
 * little spinner on save button to indicate saved
 * autoclear status
 * in-table quick search
 * resize-able table headers
-* only submit the last query
+* switch to immutable
+* show which db is selected on lefthand side
+* split out db connection to its own module
+* husky
 
 before sharing:
 * host bootstrap internally
@@ -40,6 +40,9 @@ later:
 bugs:
 * creating new window from a new window isn't sized right
 * creating a new window creates 2 new windows
+* sticky headers show a bit of the content underneath when they scroll past
+* format int8 as numbers
+
 
 notes:
 streaming: https://github.com/vitaly-t/pg-promise/wiki/Learn-by-Example#from-database

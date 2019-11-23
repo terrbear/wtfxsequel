@@ -43,9 +43,8 @@ body {
 #query-pane {
   width: 100%;
   margin: auto;
-  height: 250px;
-  margin-bottom: 1em;
-  border-bottom: 1px solid black;
+  height: 255px;
+  border-bottom: 10px solid #dee2e6;
 }
 
 #query-view {
@@ -63,6 +62,23 @@ body {
   color: black;
   text-align: left;
   font-size: x-small;
+}
+
+#results-pane th {
+  position: sticky;
+  top: 0;
+  background: #dee2e6;
+  padding-top: 0.5em;
+}
+
+#results-pane td {
+  width: 1px;
+  white-space: nowrap;
+}
+
+.table-header {
+  resize: horizontal;
+  overflow: auto;
 }
 
 #status {
