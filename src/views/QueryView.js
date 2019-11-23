@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 
 import QueryEditor from "../components/QueryEditor";
+import ResultsTable from "../components/ResultsTable";
 
 import StatusContext from "../StatusContext";
 
@@ -32,27 +33,7 @@ function QueryView({ connection }) {
         <QueryEditor connection={connection} runQuery={runQuery} />
       </div>
       <div id="results-pane">
-        {rows.length > 0 && (
-          <table className="table table-bordered table-hover">
-            <thead>
-              <tr>
-                {cols.map((col, idx) => (
-                  <th key={idx}>{col}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, idx) => (
-                <tr key={idx}>
-                  {cols.map((col, cIdx) => (
-                    <td key={cIdx}>{row[col]}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-        {rows.length === 0 && <h3>Run a query to get results</h3>}
+        <ResultsTable rows={rows} cols={cols} />
       </div>
     </div>
   );

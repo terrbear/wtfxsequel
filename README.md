@@ -15,10 +15,14 @@ TODO
 * stream data to table
 * support connections through ssh
 * show query errors
-* support multiple windows
 * auto-format numbers to be right-aligned
 * resize automagically and line up with pixel heights/widths
+* menu options for new window / run query
 
 before sharing:
 * host bootstrap internally
 * about text
+
+later:
+* support dark mode
+* dynamodb support
