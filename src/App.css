@@ -10,7 +10,6 @@ body {
   flex-direction: column;
   align-items: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 #query-pane {
@@ -36,4 +35,14 @@ body {
   color: black;
   text-align: left;
   font-size: x-small;
+}
+
+#status {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding-right: 2em;
+  padding-left: 2em;
+  font-size: small;
+  background-color: rgb(200, 200, 200);
 }

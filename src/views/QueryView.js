@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import QueryEditor from "../components/QueryEditor";
+
+import StatusContext from "../StatusContext";
 
 function QueryView({ connection }) {
   const [cols, setCols] = useState([]);
   const [rows, setRows] = useState([]);
+  const statusContext = useContext(StatusContext);
 
   const runQuery = (query) => {
+    statusContext.setStatus("Running query...");
     window.ipc.invoke("query", query).then(res => {
       if (res.length > 0) {
+        statusContext.setStatus(`${res.length} rows returned`);
         setCols(Object.keys(res[0]));
         setRows(res);
       }
