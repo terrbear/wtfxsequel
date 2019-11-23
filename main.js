@@ -3,26 +3,64 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const pgp = require("pg-promise")();
 const { ipcMain } = require("electron");
+const Store = require("electron-store");
+const keytar = require("keytar");
 
-const config = {
-  host: "localhost",
-  port: 5432,
-  database: "finance_funday",
-  user: "tinle",
-  password: "",
-  max: 5, // max number of clients in the pool
+const store = new Store();
+
+if (process.env.CLEAR_STORAGE) {
+  store.clear();
+}
+
+const DEFAULT_CONNECTION_OPTIONS = {
+  max: 5,
   idleTimeoutMillis: 1000 // how long a client is allowed to remain idle before being closed
 };
-
-const db = pgp(config);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-ipcMain.handle("query", async (event, query) => {
-  console.log("got a query: ", query);
-  return db.any(query);
+const dbHandles = {};
+
+ipcMain.handle("connections/list", async () => {
+  return store.get("connections") || [];
+});
+
+ipcMain.handle("connections/save", async (event, payload) => {
+  const connections = store.get("connections") || [];
+
+  if (payload.password) {
+    const { password } = payload;
+    delete payload.password;
+    keytar.setPassword("wtfx sequel", payload.id, password);
+  }
+
+  const connection = connections.find(c => c.id === payload.id);
+
+  delete dbHandles[payload.id];
+
+  if (connection) {
+    Object.assign(connection, payload);
+  } else {
+    connections.push(payload);
+  }
+
+  store.set("connections", connections);
+});
+
+ipcMain.handle("query", async (event, { connectionId, query }) => {
+  if (dbHandles[connectionId]) {
+    return dbHandles[connectionId].any(query);
+  }
+
+  const connection = store.get("connections").find(c => c.id === connectionId);
+
+  return keytar.getPassword("wtfx sequel", connectionId).then(password => {
+    dbHandles[connectionId] = pgp({ ...DEFAULT_CONNECTION_OPTIONS, ...connection, password });
+
+    return dbHandles[connectionId].any(query);
+  });
 });
 
 function createWindow() {
@@ -44,10 +82,16 @@ function createWindow() {
         height: 1000,
         webPreferences: {
           preload: path.join(__dirname, "preload.js"),
-          nodeIntegrationInSubFrames: true,
+          nodeIntegrationInSubFrames: true
         }
       });
       event.newGuest = new BrowserWindow(options);
+
+      // https://github.com/electron/electron/issues/11128
+      setTimeout(() => {
+        event.sender.removeAllListeners("current-render-view-deleted");
+      }, 0);
+
       event.newGuest.loadURL(url);
     }
   );
@@ -67,6 +111,11 @@ function createWindow() {
     mainWindow = null;
   });
 }
+
+// need this bc of the electron issue above (11128)
+process.on("uncaughtException", err => {
+  console.log(err);
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

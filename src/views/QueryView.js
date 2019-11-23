@@ -13,7 +13,7 @@ function QueryView({ connection }) {
   const runQuery = query => {
     status.setStatus("Running query...");
     window.ipc
-      .invoke("query", query)
+      .invoke("query", { connectionId: connection, query })
       .then(res => {
         if (res.length > 0) {
           status.setStatus(`${res.length} rows returned`);

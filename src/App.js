@@ -25,7 +25,8 @@ function App() {
 
   const statusContext = {
     status,
-    setStatus
+    setStatus,
+    clear: () => setStatus(''),
   };
 
   useEffect(() => {
