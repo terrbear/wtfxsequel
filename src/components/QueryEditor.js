@@ -20,7 +20,6 @@ function QueryEditor({ runQuery, connection }) {
   return (
     <textarea
       className="form-control"
-      rows="10"
       onKeyDown={keydown}
       onChange={e => setQuery(store.set("query", e.target.value))}
       value={query}

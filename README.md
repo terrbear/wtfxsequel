@@ -29,6 +29,7 @@ features / todo:
 * husky
 * support running highlighted query
 * proper logger
+* fix up service name for keychain access
 
 before sharing:
 * host bootstrap internally
