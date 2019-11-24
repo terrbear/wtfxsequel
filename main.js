@@ -35,6 +35,8 @@ ipcMain.handle("connections/list", async () => {
   return store.get("connections") || [];
 });
 
+console.log("connections: ", store.get("connections"));
+
 ipcMain.handle("connections/save", async (event, payload) => {
   const connections = store.get("connections") || [];
 

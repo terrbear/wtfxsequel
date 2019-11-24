@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-sql";
+import "prismjs/themes/prism.css";
 
 import Storage from "../Storage";
 
@@ -18,11 +22,16 @@ function QueryEditor({ runQuery, connection }) {
   };
 
   return (
-    <textarea
+    <Editor
       className="form-control"
       onKeyDown={keydown}
-      onChange={e => setQuery(store.set("query", e.target.value))}
+      onValueChange={sql => setQuery(store.set("query", sql))}
+      highlight={code => highlight(code, languages.sql)}
       value={query}
+      style={{
+        height: "100%",
+        fontFamily: '"Fira code", "Fira Mono", monospace',
+      }}
       placeholder="select * from table"
     />
   );

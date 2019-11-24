@@ -7,7 +7,6 @@ and
 npm start
 
 features / todo:
-* syntax highlighting on queries pane
 * sidebar showing tables from db connection
 * auto-browse by clicking on tables
 * schema viewer
